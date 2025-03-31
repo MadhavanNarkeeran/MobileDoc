@@ -10,8 +10,8 @@ class DoctorInformationTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 300,
-      height: 300,
+      width: 350,
+      height: 350,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black, width: 2)
       ),
