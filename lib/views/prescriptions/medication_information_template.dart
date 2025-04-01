@@ -40,12 +40,18 @@ class MedicationInformationTemplate extends StatelessWidget {
                 const Text("Dosage",
                     style:
                         TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                Text(dosage),
+                Text(
+                  dosage,
+                  textAlign: TextAlign.center,
+                ),
                 const SizedBox(height: 10),
                 const Text("Additional Instructions",
                     style:
                         TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                Text(instruction),
+                Text(
+                  instruction,
+                  textAlign: TextAlign.center,
+                ),
                 const SizedBox(height: 10),
                 const Text("Links to Pharmacy Options",
                     style:

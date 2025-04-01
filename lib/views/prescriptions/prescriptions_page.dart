@@ -14,7 +14,14 @@ class PrescriptionsPage extends StatelessWidget {
           child: Center(
             child: Column(
               children: [
-                const Text("Prescription Instructions"),
+                const Text(
+                  "Your Medications",
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold
+                  ),
+                  textAlign: TextAlign.center,
+                ),
                 const SizedBox(height: 10),
                 const MedicationInformationTemplate(
                   medication: "Tylenol", 
