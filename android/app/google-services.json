@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "399681406363",
+    "project_id": "mobiledocfirebase",
+    "storage_bucket": "mobiledocfirebase.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:399681406363:android:4f223b989434b915b0cd3e",
+        "android_client_info": {
+          "package_name": "com.example.mobiledoc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVamzL6YI6_vqhMND7-46QBhgparVIFv0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../dashboard/dashboard_page.dart';
 import '../doctors/doctors_page.dart';
 import '../prescriptions/prescriptions_page.dart';
+import '../settings/settings_page.dart';
 import '../../widgets/bottom_nav_bar.dart';
 
 class AppNavigation extends StatefulWidget {
@@ -14,10 +15,11 @@ class AppNavigation extends StatefulWidget {
 class _AppNavigationState extends State<AppNavigation> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = const [
-    DashboardPage(),
-    DoctorsPage(),
-    PrescriptionsPage(),
+  final List<Widget> _screens = [
+    const DashboardPage(),
+    const DoctorsPage(),
+    const PrescriptionsPage(),
+    SettingsPage(),
   ];
 
   void _onTabTapped(int index) {
