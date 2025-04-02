@@ -38,7 +38,7 @@ class AppointmentsList extends StatelessWidget {
           return Center(
             child: Text(
               doctorName != null
-                  ? "No appointments scheduled for Dr. $doctorName."
+                  ? "No appointments scheduled with Dr. $doctorName."
                   : "No upcoming appointments.",
             ),
           );
@@ -58,13 +58,13 @@ class AppointmentsList extends StatelessWidget {
               ),
             ],
           ),
-          height: 180, 
+          height: 180,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 doctorName != null
-                    ? "Appointments for Dr. $doctorName"
+                    ? "Appointments with Dr. $doctorName"
                     : "All Upcoming Appointments",
                 style: const TextStyle(
                   fontSize: 20,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../appointments/add_appointments_page.dart';
 import '../../appointments/appointments_list.dart';
+import 'edit_doctor_page.dart';
 
 class DoctorDetailsPage extends StatefulWidget {
   final String doctorId;
@@ -23,11 +24,54 @@ class DoctorDetailsPage extends StatefulWidget {
 }
 
 class DoctorDetailsPageState extends State<DoctorDetailsPage> {
+  late String _name;
+  late String _phoneNumber;
+  late String _email;
+  late String _about;
+
+  @override
+  void initState() {
+    super.initState();
+    _name = widget.name;
+    _phoneNumber = widget.phoneNumber;
+    _email = widget.email;
+    _about = widget.about;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dr. ${widget.name}"),
+        title: Text("Dr. $_name"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            tooltip: 'Edit Doctor',
+            onPressed: () async {
+              final updated = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => EditDoctorPage(
+                    doctorId: widget.doctorId,
+                    name: _name,
+                    phoneNumber: _phoneNumber,
+                    email: _email,
+                    about: _about,
+                  ),
+                ),
+              );
+
+              if (updated != null && mounted) {
+                setState(() {
+                  _name = updated['name'] ?? _name;
+                  _phoneNumber = updated['phoneNumber'] ?? _phoneNumber;
+                  _email = updated['email'] ?? _email;
+                  _about = updated['about'] ?? _about;
+                });
+              }
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -40,17 +84,17 @@ class DoctorDetailsPageState extends State<DoctorDetailsPage> {
             ),
             const SizedBox(height: 16),
             Text(
-              "Dr. ${widget.name}",
+              "Dr. $_name",
               style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            Text("Phone: ${widget.phoneNumber}"),
+            Text("Phone: $_phoneNumber"),
             const SizedBox(height: 8),
-            Text("Email: ${widget.email}"),
+            Text("Email: $_email"),
             const SizedBox(height: 16),
             const Text("About",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            Text(widget.about),
+            Text(_about),
             const SizedBox(height: 24),
             const Text("Appointments",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
@@ -62,7 +106,7 @@ class DoctorDetailsPageState extends State<DoctorDetailsPage> {
                   MaterialPageRoute(
                     builder: (_) => AddAppointmentPage(
                       doctorId: widget.doctorId,
-                      doctorName: widget.name,
+                      doctorName: _name,
                     ),
                   ),
                 );
@@ -70,7 +114,7 @@ class DoctorDetailsPageState extends State<DoctorDetailsPage> {
               child: const Text("Add Appointment"),
             ),
             const SizedBox(height: 20),
-            AppointmentsList(doctorName: widget.name),
+            AppointmentsList(doctorName: _name),
           ],
         ),
       ),
