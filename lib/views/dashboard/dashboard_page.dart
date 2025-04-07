@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../appointments/appointments_list.dart';
 import 'calendar_display.dart';
 
@@ -25,36 +25,69 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Dashboard')),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            FutureBuilder<String>(
-              future: _fetchUsername(),
-              builder: (context, snapshot) {
-                final name = capitalize(snapshot.data ?? "User");
-                return Text(
-                  "Welcome Back,\n$name!",
-                  style: const TextStyle(
-                      fontSize: 30, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                );
-              },
+    return CupertinoPageScaffold(
+      child: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.only(
+                  top: 60, bottom: 30, left: 20, right: 20),
+              decoration: const BoxDecoration(
+                color: CupertinoColors.activeBlue,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                ),
+              ),
+              child: const Text(
+                'Dashboard',
+                style: TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  color: CupertinoColors.white,
+                ),
+              ),
             ),
-            const SizedBox(height: 10),
-            const Text(
-              "Upcoming Appointments",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+
+          //  Welcome message and content
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FutureBuilder<String>(
+                    future: _fetchUsername(),
+                    builder: (context, snapshot) {
+                      final name = capitalize(snapshot.data ?? "...");
+                      return Text(
+                        "Welcome back, $name!",
+                        style: const TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 15),
+                  const Text(
+                    "Upcoming Appointments",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  const CalendarDisplay(),
+                  const SizedBox(height: 20),
+                  const AppointmentsList(),
+                ],
+              ),
             ),
-            const SizedBox(height: 10),
-            CalendarDisplay(),
-            const SizedBox(height: 10),
-            const AppointmentsList(),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

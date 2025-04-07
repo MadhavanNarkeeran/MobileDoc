@@ -17,14 +17,18 @@ class WelcomePage extends StatelessWidget {
             children: [
               const Text(
                 "Welcome to MobileDoc",
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
               const Text(
                 "Manage your health, doctors, and appointments all in one place.",
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 16, color: Colors.black54),
               ),
               const SizedBox(height: 40),
               ElevatedButton.icon(
@@ -38,6 +42,15 @@ class WelcomePage extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(50),
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  textStyle: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
@@ -52,6 +65,15 @@ class WelcomePage extends StatelessWidget {
                 },
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size.fromHeight(50),
+                  foregroundColor: Colors.blue,
+                  side: const BorderSide(color: Colors.blue, width: 2),
+                  textStyle: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
             ],

@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart'; // For SnackBar fallback
 import 'package:mobiledoc/views/navigation/app_navigation.dart';
 import '../../services/auth_service.dart';
 
@@ -21,82 +22,109 @@ class RegisterPageState extends State<RegisterPage> {
 
   Future<void> _register() async {
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        _loading = true;
-      });
+      setState(() => _loading = true);
+
       try {
         final user = await _authService.registerWithEmailAndPassword(
           _emailController.text,
           _passwordController.text,
           _usernameController.text,
         );
+
         if (!mounted) return;
+
         if (user != null) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) => AppNavigation()),
+            CupertinoPageRoute(builder: (_) => AppNavigation()),
           );
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Registration failed: ${e.toString()}')),
+          SnackBar(content: Text('Registration failed: \${e.toString()}')),
         );
       }
-      setState(() {
-        _loading = false;
-      });
+
+      setState(() => _loading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Register")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              TextFormField(
-                controller: _usernameController,
-                decoration: const InputDecoration(
-                  labelText: "Username",
-                  border: OutlineInputBorder(),
+    return CupertinoPageScaffold(
+      child: SafeArea(
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(20, 60, 20, 30),
+              decoration: const BoxDecoration(
+                color: CupertinoColors.activeBlue,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
                 ),
-                validator: (value) =>
-                    value == null || value.isEmpty ? "Enter username" : null,
               ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: "Email",
-                  border: OutlineInputBorder(),
+              child: const Text(
+                'Register',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
                 ),
-                validator: (value) =>
-                    value == null || value.isEmpty ? "Enter email" : null,
               ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(
-                  labelText: "Password",
-                  border: OutlineInputBorder(),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Form(
+                  key: _formKey,
+                  child: ListView(
+                    children: [
+                      const SizedBox(height: 30),
+                      CupertinoTextFormFieldRow(
+                        controller: _usernameController,
+                        placeholder: "Username",
+                        validator: (value) => (value == null || value.isEmpty)
+                            ? "Enter username"
+                            : null,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                      const SizedBox(height: 16),
+                      CupertinoTextFormFieldRow(
+                        controller: _emailController,
+                        placeholder: "Email",
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) => (value == null || value.isEmpty)
+                            ? "Enter email"
+                            : null,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                      const SizedBox(height: 16),
+                      CupertinoTextFormFieldRow(
+                        controller: _passwordController,
+                        placeholder: "Password",
+                        obscureText: true,
+                        validator: (value) => (value == null || value.isEmpty)
+                            ? "Enter password"
+                            : null,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                      const SizedBox(height: 24),
+                      _loading
+                          ? const Center(child: CupertinoActivityIndicator())
+                          : CupertinoButton(
+                              color: CupertinoColors.activeBlue,
+                              borderRadius: BorderRadius.circular(8),
+                              onPressed: _register,
+                              child: const Text("Register"),
+                            ),
+                    ],
+                  ),
                 ),
-                obscureText: true,
-                validator: (value) =>
-                    value == null || value.isEmpty ? "Enter password" : null,
               ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: _loading ? null : _register,
-                child: _loading
-                    ? const CircularProgressIndicator()
-                    : const Text("Register"),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

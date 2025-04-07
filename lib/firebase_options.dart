@@ -83,4 +83,5 @@ class DefaultFirebaseOptions {
     authDomain: 'mobiledocfirebase.firebaseapp.com',
     storageBucket: 'mobiledocfirebase.firebasestorage.app',
   );
+
 }

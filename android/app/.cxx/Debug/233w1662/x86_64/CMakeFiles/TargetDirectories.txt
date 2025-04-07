@@ -1,0 +1,2 @@
+/Users/jasonfirestein/Desktop/spr25/436/code/nextbigthing/mobiledoc/android/app/.cxx/Debug/233w1662/x86_64/CMakeFiles/edit_cache.dir
+/Users/jasonfirestein/Desktop/spr25/436/code/nextbigthing/mobiledoc/android/app/.cxx/Debug/233w1662/x86_64/CMakeFiles/rebuild_cache.dir

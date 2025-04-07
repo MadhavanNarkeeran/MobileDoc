@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart'; // for Dismissible background
 import 'components/add_doctor.dart';
 import 'components/doctor_detail_page.dart';
 import 'components/doctor_information_template.dart';
@@ -24,7 +25,7 @@ class _DoctorsPageState extends State<DoctorsPage> {
   void _navigateToDetails(Doctor doctor, String docId) {
     Navigator.push(
       context,
-      MaterialPageRoute(
+      CupertinoPageRoute(
         builder: (_) => DoctorDetailsPage(
           doctorId: docId,
           name: doctor.name,
@@ -48,113 +49,138 @@ class _DoctorsPageState extends State<DoctorsPage> {
         .orderBy('name')
         .snapshots();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Doctors',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const AddDoctorPage()),
-              );
-            },
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Your Doctors",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+    return CupertinoPageScaffold(
+      child: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Container(
+              padding: const EdgeInsets.only(
+                  left: 20, right: 20, bottom: 30, top: 60),
+              decoration: const BoxDecoration(
+                color: CupertinoColors.activeBlue,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                ),
+              ),
+              width: double.infinity,
+              child: const Text(
+                "Doctors",
+                style: TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
             ),
-            const SizedBox(height: 15),
-            Expanded(
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Your Doctors",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () async {
+                      await Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                            builder: (_) => const AddDoctorPage()),
+                      );
+                    },
+                    child: const Icon(CupertinoIcons.add, size: 24),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
               child: StreamBuilder<QuerySnapshot>(
                 stream: userDoctorsStream,
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
-                    return Center(child: Text("Error: ${snapshot.error}"));
+                    return Center(child: Text("Error: \${snapshot.error}"));
                   }
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const CupertinoActivityIndicator();
                   }
 
                   final docs = snapshot.data!.docs;
                   if (docs.isEmpty) {
-                    return const Center(child: Text("No doctors added yet."));
+                    return const Text("No doctors added yet.");
                   }
 
-                  return ListView.builder(
-                    itemCount: docs.length,
-                    itemBuilder: (context, index) {
-                      final docData =
-                          docs[index].data() as Map<String, dynamic>;
+                  return Column(
+                    children: docs.map((doc) {
+                      final data = doc.data() as Map<String, dynamic>;
                       final doctor = Doctor(
-                        name: docData['name'] ?? '',
-                        specialization: docData['specialization'] ?? '',
-                        phone: docData['phone'] ?? '',
-                        email: docData['email'] ?? '',
-                        about: docData['about'] ?? '',
+                        name: data['name'] ?? '',
+                        specialization: data['specialization'] ?? '',
+                        phone: data['phone'] ?? '',
+                        email: data['email'] ?? '',
+                        about: data['about'] ?? '',
                       );
 
-                      return Dismissible(
-                        key: Key(docs[index].id),
-                        direction: DismissDirection.endToStart,
-                        confirmDismiss: (direction) async {
-                          final confirm = await showDialog<bool>(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 2),
+                        child: Dismissible(
+                          key: Key(doc.id),
+                          direction: DismissDirection.endToStart,
+                          confirmDismiss: (direction) async {
+                            return await showCupertinoDialog<bool>(
+                              context: context,
+                              builder: (context) => CupertinoAlertDialog(
                                 title: const Text("Confirm Delete"),
                                 content: const Text(
                                     "Are you sure you want to delete this doctor?"),
                                 actions: [
-                                  TextButton(
+                                  CupertinoDialogAction(
+                                    child: const Text("Cancel"),
                                     onPressed: () =>
                                         Navigator.of(context).pop(false),
-                                    child: const Text("Cancel"),
                                   ),
-                                  TextButton(
+                                  CupertinoDialogAction(
+                                    isDestructiveAction: true,
+                                    child: const Text("Delete"),
                                     onPressed: () =>
                                         Navigator.of(context).pop(true),
-                                    child: const Text("Delete"),
                                   ),
                                 ],
-                              );
-                            },
-                          );
-                          return confirm;
-                        },
-                        onDismissed: (direction) =>
-                            _deleteDoctor(docs[index].id),
-                        background: Container(
-                          color: Colors.red,
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: const Icon(Icons.delete, color: Colors.white),
-                        ),
-                        child: DoctorInformationTemplate(
-                          name: doctor.name,
-                          specialization: doctor.specialization,
-                          onTap: () =>
-                              _navigateToDetails(doctor, docs[index].id),
+                              ),
+                            );
+                          },
+                          onDismissed: (direction) => _deleteDoctor(doc.id),
+                          background: Container(
+                            color: Colors.red,
+                            alignment: Alignment.centerRight,
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: const Icon(CupertinoIcons.delete,
+                                color: Colors.white),
+                          ),
+                          child: DoctorInformationTemplate(
+                            name: doctor.name,
+                            specialization: doctor.specialization,
+                            onTap: () => _navigateToDetails(doctor, doc.id),
+                          ),
                         ),
                       );
-                    },
+                    }).toList(),
                   );
                 },
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

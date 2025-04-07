@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'medication_tile.dart';
@@ -19,63 +20,95 @@ class PrescriptionsPage extends StatelessWidget {
         .where('userId', isEqualTo: user.uid)
         .orderBy('medication');
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Prescriptions'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const AddMedicationPage()));
-            },
-          )
-        ],
-      ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: query.snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(child: Text("Error: ${snapshot.error}"));
-          }
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          final docs = snapshot.data!.docs;
-          if (docs.isEmpty) {
-            return const Center(child: Text("No medications added."));
-          }
-          return SingleChildScrollView(
+    return CupertinoPageScaffold(
+      child: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(20, 60, 20, 30),
+              decoration: const BoxDecoration(
+                color: CupertinoColors.activeBlue,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                ),
+              ),
+              child: const Text(
+                'Prescriptions',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Column(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 10),
-                    padding: const EdgeInsets.all(10),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: docs.length,
-                      itemBuilder: (context, index) {
-                        final doc = docs[index];
-                        final data = doc.data() as Map<String, dynamic>;
-                        return MedicationTile(
+                  const Text(
+                    "Your Medications",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (_) => const AddMedicationPage(),
+                        ),
+                      );
+                    },
+                    child: const Icon(CupertinoIcons.add, size: 28),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: query.snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(child: Text("Error: \${snapshot.error}"));
+                  }
+                  if (!snapshot.hasData) {
+                    return const CupertinoActivityIndicator();
+                  }
+                  final docs = snapshot.data!.docs;
+                  if (docs.isEmpty) {
+                    return const Text("No medications added.");
+                  }
+                  return Column(
+                    children: docs.map((doc) {
+                      final data = doc.data() as Map<String, dynamic>;
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: MedicationTile(
                           docId: doc.id,
                           medication: data['medication'] ?? 'No name',
                           dosage: data['dosage'] ?? 'No dosage',
                           instruction: data['instruction'] ?? '',
                           links: data['links'] ?? '',
-                        );
-                      },
-                    ),
-                  )
-                ],
+                        ),
+                      );
+                    }).toList(),
+                  );
+                },
               ),
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }

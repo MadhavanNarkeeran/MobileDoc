@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobiledoc/services/auth_service.dart';
 import 'package:mobiledoc/views/navigation/app_navigation.dart';
@@ -12,7 +13,6 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -21,29 +21,29 @@ class LoginPageState extends State<LoginPage> {
 
   Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        _loading = true;
-      });
+      setState(() => _loading = true);
 
       try {
         final user = await _authService.signInWithEmailAndPassword(
-            _emailController.text, _passwordController.text);
+          _emailController.text,
+          _passwordController.text,
+        );
+
         if (!mounted) return;
+
         if (user != null) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) => AppNavigation()),
+            CupertinoPageRoute(builder: (_) => AppNavigation()),
           );
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Login failed. Try Again.')),
+          const SnackBar(content: Text('Login failed. Try Again.')),
         );
       }
 
-      setState(() {
-        _loading = false;
-      });
+      setState(() => _loading = false);
     }
   }
 
@@ -54,55 +54,90 @@ class LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  static const TextStyle headerStyle = TextStyle(
+    color: CupertinoColors.white,
+    fontSize: 36,
+    fontWeight: FontWeight.bold,
+  );
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Login")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: "Email",
-                  border: OutlineInputBorder(),
+    return CupertinoPageScaffold(
+      child: SafeArea(
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(20, 60, 20, 30),
+              decoration: const BoxDecoration(
+                color: CupertinoColors.activeBlue,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
                 ),
-                validator: (value) =>
-                    value == null || value.isEmpty ? "Enter email" : null,
               ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(
-                  labelText: "Password",
-                  border: OutlineInputBorder(),
+              child: const Text('Login', style: headerStyle),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Form(
+                  key: _formKey,
+                  child: ListView(
+                    children: [
+                      const SizedBox(height: 30),
+                      CupertinoTextFormFieldRow(
+                        controller: _emailController,
+                        placeholder: "Email",
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) => (value == null || value.isEmpty)
+                            ? "Enter email"
+                            : null,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                      const SizedBox(height: 16),
+                      CupertinoTextFormFieldRow(
+                        controller: _passwordController,
+                        placeholder: "Password",
+                        obscureText: true,
+                        validator: (value) => (value == null || value.isEmpty)
+                            ? "Enter password"
+                            : null,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                      const SizedBox(height: 24),
+                      _loading
+                          ? const Center(child: CupertinoActivityIndicator())
+                          : CupertinoButton(
+                              color: CupertinoColors.activeBlue,
+                              borderRadius: BorderRadius.circular(8),
+                              onPressed: _login,
+                              child: const Text("Login"),
+                            ),
+                      const SizedBox(height: 16),
+                      CupertinoButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (_) => const RegisterPage()),
+                          );
+                        },
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: const Text(
+                          "Don't have an account? Register here",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: CupertinoColors.activeBlue,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                obscureText: true,
-                validator: (value) =>
-                    value == null || value.isEmpty ? "Enter password" : null,
               ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: _loading ? null : _login,
-                child: _loading
-                    ? const CircularProgressIndicator()
-                    : const Text("Login"),
-              ),
-              const SizedBox(height: 16),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const RegisterPage()),
-                  );
-                },
-                child: const Text("Don't have an account? Register here"),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
