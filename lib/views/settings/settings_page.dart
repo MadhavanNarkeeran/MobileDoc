@@ -66,6 +66,7 @@ class SettingsPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16),
                               boxShadow: [
                                 BoxShadow(
+                                  // ignore: deprecated_member_use
                                   color: Colors.black.withOpacity(0.05),
                                   blurRadius: 10,
                                   offset: const Offset(0, 4),
@@ -151,6 +152,7 @@ class SettingsPage extends StatelessWidget {
                               onPressed: () async {
                                 await AuthService().signOut();
                                 Navigator.pushAndRemoveUntil(
+                                  // ignore: use_build_context_synchronously
                                   context,
                                   CupertinoPageRoute(
                                       builder: (_) => const WelcomePage()),

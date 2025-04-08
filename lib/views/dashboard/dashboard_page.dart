@@ -7,15 +7,16 @@ import 'calendar_display.dart';
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
 
-  Future<String> _fetchUsername() async {
+  Stream<DocumentSnapshot<Map<String, dynamic>>> get userDocStream {
     final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return "Guest";
-
-    final doc = await FirebaseFirestore.instance
+    if (user == null) {
+      // Return an empty stream to avoid null issues
+      return const Stream.empty();
+    }
+    return FirebaseFirestore.instance
         .collection('users')
         .doc(user.uid)
-        .get();
-    return doc.data()?['username'] ?? "User";
+        .snapshots();
   }
 
   String capitalize(String name) {
@@ -26,44 +27,51 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      child: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.only(
-                  top: 60, bottom: 30, left: 20, right: 20),
-              decoration: const BoxDecoration(
-                color: CupertinoColors.activeBlue,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Fixed Blue Header
+          Container(
+            width: double.infinity,
+            padding:
+                const EdgeInsets.only(top: 60, bottom: 30, left: 20, right: 20),
+            decoration: const BoxDecoration(
+              color: CupertinoColors.activeBlue,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
               ),
-              child: const Text(
-                'Dashboard',
-                style: TextStyle(
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
-                  color: CupertinoColors.white,
-                ),
+            ),
+            child: const Text(
+              'Dashboard',
+              style: TextStyle(
+                fontSize: 36,
+                fontWeight: FontWeight.bold,
+                color: CupertinoColors.white,
               ),
             ),
           ),
 
-          //  Welcome message and content
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+          // Scrollable content
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  FutureBuilder<String>(
-                    future: _fetchUsername(),
+                  StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                    stream: userDocStream,
                     builder: (context, snapshot) {
-                      final name = capitalize(snapshot.data ?? "...");
+                      if (!snapshot.hasData) {
+                        return const CupertinoActivityIndicator();
+                      }
+
+                      final data = snapshot.data!.data();
+                      final username = data?['username'] ?? 'User';
+                      final capitalized = capitalize(username);
+
                       return Text(
-                        "Welcome back, $name!",
+                        "Welcome back, $capitalized!",
                         style: const TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.w600,
