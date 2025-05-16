@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../appointments/add_appointments_page.dart';
 import '../../appointments/appointments_list.dart';
 import 'edit_doctor_page.dart';
+import 'doctor_document_uploads.dart';
 
 class DoctorDetailsPage extends StatefulWidget {
   final String doctorId;
@@ -95,6 +96,11 @@ class DoctorDetailsPageState extends State<DoctorDetailsPage> {
             const Text("About",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             Text(_about),
+            const SizedBox(height: 24),
+            const Text("Document Uploads",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            DoctorDocumentUploads(doctorId: widget.doctorId),
             const SizedBox(height: 24),
             const Text("Appointments",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),

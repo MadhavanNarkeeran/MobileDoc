@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
 
 class MedicationTile extends StatelessWidget {
   final String docId;
@@ -7,6 +8,7 @@ class MedicationTile extends StatelessWidget {
   final String dosage;
   final String instruction;
   final String links;
+  final String? imagePath;
 
   const MedicationTile({
     super.key,
@@ -15,6 +17,7 @@ class MedicationTile extends StatelessWidget {
     required this.dosage,
     required this.instruction,
     required this.links,
+    this.imagePath,
   });
 
   @override
@@ -75,6 +78,18 @@ class MedicationTile extends StatelessWidget {
             style: const TextStyle(fontSize: 12),
           ),
           children: [
+            if (imagePath != null && imagePath!.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.file(
+                    File(imagePath!),
+                    height: 120,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(

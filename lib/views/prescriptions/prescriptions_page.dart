@@ -108,6 +108,7 @@ class PrescriptionsPage extends StatelessWidget {
                           dosage: data['dosage'] ?? 'No dosage',
                           instruction: data['instruction'] ?? '',
                           links: data['links'] ?? '',
+                          imagePath: data['imagePath'] ?? '',
                         ),
                       );
                     },

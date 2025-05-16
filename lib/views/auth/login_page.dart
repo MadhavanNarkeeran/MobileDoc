@@ -76,7 +76,13 @@ class LoginPageState extends State<LoginPage> {
                   bottomRight: Radius.circular(30),
                 ),
               ),
-              child: const Text('Login', style: headerStyle),
+              child: Semantics(
+                excludeSemantics: true,
+                child: const Text(
+                  'Login',
+                  style: headerStyle,
+                ),
+              ),
             ),
             Expanded(
               child: Padding(
@@ -107,12 +113,12 @@ class LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 24),
                       _loading
-                          ? const Center(child: CupertinoActivityIndicator())
+                          ? Center(child: CupertinoActivityIndicator())
                           : CupertinoButton(
                               color: CupertinoColors.activeBlue,
                               borderRadius: BorderRadius.circular(8),
                               onPressed: _login,
-                              child: const Text("Login"),
+                              child: Text("Login"),
                             ),
                       const SizedBox(height: 16),
                       CupertinoButton(

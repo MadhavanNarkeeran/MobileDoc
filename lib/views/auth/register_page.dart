@@ -65,12 +65,15 @@ class RegisterPageState extends State<RegisterPage> {
                   bottomRight: Radius.circular(30),
                 ),
               ),
-              child: const Text(
-                'Register',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
+              child: Semantics(
+                excludeSemantics: true,
+                child: Text(
+                  'Register',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),

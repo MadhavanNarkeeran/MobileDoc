@@ -12,7 +12,6 @@ class AuthService {
           email: email, password: password);
       User? user = result.user;
       if (user != null) {
-        // Save additional user info in Firestore.
         await _firestore.collection('users').doc(user.uid).set({
           'uid': user.uid,
           'username': username,
