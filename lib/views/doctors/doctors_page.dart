@@ -27,12 +27,11 @@ class _DoctorsPageState extends State<DoctorsPage> {
       context,
       CupertinoPageRoute(
         builder: (_) => DoctorDetailsPage(
-          doctorId: docId,
-          name: doctor.name,
-          phoneNumber: doctor.phone,
-          email: doctor.email,
-          about: doctor.about,
-        ),
+            doctorId: docId,
+            name: doctor.name,
+            phoneNumber: doctor.phone,
+            email: doctor.email,
+            about: doctor.about),
       ),
     );
   }
