@@ -41,29 +41,30 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyACdchX9lfOJR7zeFcMWRXRsjXUN42KJcU',
-    appId: '1:399681406363:web:7f1091ac84375de6b0cd3e',
-    messagingSenderId: '399681406363',
-    projectId: 'mobiledocfirebase',
-    authDomain: 'mobiledocfirebase.firebaseapp.com',
-    storageBucket: 'mobiledocfirebase.firebasestorage.app',
+    apiKey: 'AIzaSyCYwhEMnsl5g7XBUl0eqSJWynmnM016QLw',
+    appId: '1:782940469195:web:03759e2588c46e0c3a684e',
+    messagingSenderId: '782940469195',
+    projectId: 'mobiledoc-a1e97',
+    authDomain: 'mobiledoc-a1e97.firebaseapp.com',
+    storageBucket: 'mobiledoc-a1e97.firebasestorage.app',
+    measurementId: 'G-XFK2BDV9SQ',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCVamzL6YI6_vqhMND7-46QBhgparVIFv0',
-    appId: '1:399681406363:android:4f223b989434b915b0cd3e',
-    messagingSenderId: '399681406363',
-    projectId: 'mobiledocfirebase',
-    storageBucket: 'mobiledocfirebase.firebasestorage.app',
+    apiKey: 'AIzaSyAKWlexIJpuNfdjcEMY4IYilpeQxod2Zmg',
+    appId: '1:782940469195:android:cd5a250e038c7ed33a684e',
+    messagingSenderId: '782940469195',
+    projectId: 'mobiledoc-a1e97',
+    storageBucket: 'mobiledoc-a1e97.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyANDDziMRHFcOpSqAlnzi3dPthSLquRgvk',
-    appId: '1:399681406363:ios:6b2d04ad520b4728b0cd3e',
-    messagingSenderId: '399681406363',
-    projectId: 'mobiledocfirebase',
-    storageBucket: 'mobiledocfirebase.firebasestorage.app',
-    iosBundleId: 'com.example.mobiledoc',
+    apiKey: 'AIzaSyBmuAz5g02A2vKneqfSR8jTGWA7tkUKYxc',
+    appId: '1:782940469195:ios:775ace0b6732d7273a684e',
+    messagingSenderId: '782940469195',
+    projectId: 'mobiledoc-a1e97',
+    storageBucket: 'mobiledoc-a1e97.firebasestorage.app',
+    iosBundleId: 'com.mobiledoc.mycoolapp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -76,12 +77,13 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyACdchX9lfOJR7zeFcMWRXRsjXUN42KJcU',
-    appId: '1:399681406363:web:7c4ef73ccb1e08e1b0cd3e',
-    messagingSenderId: '399681406363',
-    projectId: 'mobiledocfirebase',
-    authDomain: 'mobiledocfirebase.firebaseapp.com',
-    storageBucket: 'mobiledocfirebase.firebasestorage.app',
+    apiKey: 'AIzaSyCYwhEMnsl5g7XBUl0eqSJWynmnM016QLw',
+    appId: '1:782940469195:web:6d166165747126143a684e',
+    messagingSenderId: '782940469195',
+    projectId: 'mobiledoc-a1e97',
+    authDomain: 'mobiledoc-a1e97.firebaseapp.com',
+    storageBucket: 'mobiledoc-a1e97.firebasestorage.app',
+    measurementId: 'G-4PC19W25F6',
   );
 
 }
