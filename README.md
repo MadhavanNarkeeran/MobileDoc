@@ -12,8 +12,6 @@ MobileDoc is an app designed to help patients efficiently manage their healthcar
 
 ## Features
 
-The app will contain the following features:
-
 ### User Authentication and Access Control
  * Users can register and log in securely.
  * Each user has personalized access to manage their doctors and medical records.
