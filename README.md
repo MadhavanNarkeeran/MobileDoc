@@ -2,9 +2,9 @@
 
 ## Project Team
 
- * Elliott Eager  
- * Madhavan Narkeeran  
- * Jason Firestein  
+ * Madhavan Narkeeran
+ * Elliott Eager
+ * Jason Firestein
 
 ## App Description
 
